@@ -1,7 +1,8 @@
 "use client";
 
-import { Home, Package, Sparkle, Users } from "lucide-react";
+import { Home, Package, ShoppingCart, Tag } from "lucide-react";
 
+import { ModeToggle } from "@/components/mode-toggle";
 import {
   Sidebar,
   SidebarContent,
@@ -24,20 +25,25 @@ const items = [
     icon: Home,
   },
   {
-    title: "Users",
-    url: "/dashboard/users",
-    icon: Users,
-  },
-  {
     title: "Products",
     url: "/dashboard/products",
     icon: Package,
   },
   {
-    title: "AI",
-    url: "/dashboard/ai",
-    icon: Sparkle,
+    title: "Discounts",
+    url: "/dashboard/discounts",
+    icon: Tag,
   },
+  {
+    title: "Cart Simulator",
+    url: "/dashboard/cart-simulator",
+    icon: ShoppingCart,
+  },
+  // {
+  //   title: "AI",
+  //   url: "/dashboard/ai",
+  //   icon: Sparkle,
+  // },
 ];
 
 export function DashboardSidebar() {
@@ -46,7 +52,7 @@ export function DashboardSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <p className="text-lg font-bold pl-4 py-2">Dashboard</p>
+        <h3 className="text-lg font-bold pl-2 py-2">Margin Calculator</h3>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -66,7 +72,11 @@ export function DashboardSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter></SidebarFooter>
+      <SidebarFooter>
+        <div className="flex justify-end">
+          <ModeToggle />
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }

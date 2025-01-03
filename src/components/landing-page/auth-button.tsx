@@ -8,7 +8,7 @@ export default function AuthButton() {
   const { isAuthenticated } = useConvexAuth();
 
   return (
-    <Button asChild variant={isAuthenticated ? "default" : "link"}>
+    <Button asChild variant="link">
       <Link href={isAuthenticated ? "/dashboard" : "/sign-in"}>
         {isAuthenticated ? "Dashboard" : "Sign In"}{" "}
         <span aria-hidden="true" className="ml-2">
