@@ -3,6 +3,19 @@ import { v } from "convex/values";
 
 // @snippet start schema
 export default defineSchema({
+  users: defineTable({
+    clerkId: v.string(),
+    email: v.string(),
+    name: v.string(),
+    createdAt: v.number(),
+  }).index("by_clerk_id", ["clerkId"]),
+
+  organizations: defineTable({
+    clerkId: v.string(),
+    name: v.string(),
+    createdAt: v.number(),
+  }).index("by_clerk_id", ["clerkId"]),
+
   products: defineTable({
     name: v.string(),
     prices: v.array(
@@ -13,7 +26,9 @@ export default defineSchema({
       })
     ),
     productionCost: v.number(),
-  }),
+    organizationId: v.id("organizations"),
+  }).index("by_organization", ["organizationId"]),
+
   discounts: defineTable({
     name: v.string(),
     type: v.union(
@@ -24,6 +39,7 @@ export default defineSchema({
     value: v.optional(v.number()),
     buyX: v.optional(v.number()),
     getY: v.optional(v.number()),
-  }),
+    organizationId: v.id("organizations"),
+  }).index("by_organization", ["organizationId"]),
 });
 // @snippet end schema

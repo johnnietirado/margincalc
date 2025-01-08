@@ -1,8 +1,6 @@
-import { db } from "@/database";
-import { users } from "@/database/schema";
+import { db } from "@/convex/_generated/api";
 import { type UserJSON } from "@clerk/clerk-sdk-node";
 import { type WebhookEvent } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 
 export const handleClerkUserUpdated = async (clerkEvent: WebhookEvent) => {
   const data: UserJSON = clerkEvent.data as UserJSON;
