@@ -26,20 +26,36 @@ export function applyDiscount(
 
   switch (discount.type) {
     case "percentOff":
-      return subtotal * (1 - discount.value / 100);
+      return subtotal * (1 - (discount.value ?? 0) / 100);
     case "amountOff":
-      return Math.max(0, subtotal - discount.value);
+      return Math.max(0, subtotal - (discount.value ?? 0));
     case "buyXGetY": {
       if (discount.buyX && discount.getY) {
-        const totalQuantity = cart.reduce(
-          (total, item) => total + item.quantity,
-          0
-        );
-        const freeItems =
-          Math.floor(totalQuantity / (discount.buyX + discount.getY)) *
-          discount.getY;
-        const averagePrice = subtotal / totalQuantity;
-        return subtotal - averagePrice * freeItems;
+        // Sort items by price (cheapest first) and expand them by quantity
+        const expandedItems = cart
+          .flatMap((item) =>
+            Array(item.quantity).fill({
+              sellingPrice: item.sellingPrice,
+            })
+          )
+          .sort((a, b) => a.sellingPrice - b.sellingPrice);
+
+        const totalQuantity = expandedItems.length;
+        const groupSize = discount.buyX + discount.getY;
+        const numGroups = Math.floor(totalQuantity / groupSize);
+
+        // Calculate total discount by taking the cheapest items as free items
+        let totalDiscount = 0;
+        for (let i = 0; i < numGroups; i++) {
+          // For each group, take the last Y items (which will be the cheapest due to sorting)
+          const startIdx = i * groupSize + discount.buyX;
+          const endIdx = startIdx + discount.getY;
+          for (let j = startIdx; j < endIdx; j++) {
+            totalDiscount += expandedItems[j].sellingPrice;
+          }
+        }
+
+        return subtotal - totalDiscount;
       }
       return subtotal;
     }
