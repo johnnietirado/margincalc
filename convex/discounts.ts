@@ -1,9 +1,15 @@
-import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { Id } from "@/convex/_generated/dataModel";
+import { getUserOrganization } from "@/convex/utils";
+import { ConvexError, v } from "convex/values";
+import { mutation, query, QueryCtx } from "./_generated/server";
 
 export const get = query({
   handler: async (ctx) => {
-    return await ctx.db.query("discounts").collect();
+    const userOrganization = await getUserOrganization(ctx);
+    return await ctx.db
+      .query("discounts")
+      .filter((q) => q.eq(q.field("organizationId"), userOrganization.id))
+      .collect();
   },
 });
 
@@ -20,9 +26,15 @@ export const create = mutation({
     getY: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    const { id: organizationId } = await getUserOrganization(ctx);
+    if (!organizationId) {
+      throw new ConvexError("No organization for this user");
+    }
+
     return await ctx.db.insert("discounts", {
       ...args,
       value: args.value ?? 0,
+      organizationId,
     });
   },
 });
@@ -42,6 +54,14 @@ export const update = mutation({
   },
   handler: async (ctx, args) => {
     const { id, ...discountData } = args;
+    const { id: organizationId } = await getUserOrganization(ctx);
+    if (!organizationId) {
+      throw new ConvexError("No organization for this user");
+    }
+    if (!(await isDiscountInOrganization(ctx, organizationId, id))) {
+      throw new ConvexError("Discount not found in organization");
+    }
+
     return await ctx.db.patch(id, discountData);
   },
 });
@@ -51,6 +71,35 @@ export const remove = mutation({
     id: v.id("discounts"),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.delete(args.id);
+    const { id } = args;
+    const { id: organizationId } = await getUserOrganization(ctx);
+    if (!organizationId) {
+      throw new ConvexError("No organization for this user");
+    }
+    if (!(await isDiscountInOrganization(ctx, organizationId, id))) {
+      throw new ConvexError("Discount not found in organization");
+    }
+    return await ctx.db.delete(id);
   },
 });
+
+const isDiscountInOrganization = async (
+  ctx: QueryCtx,
+  organizationId: Id<"organizations">,
+  discountId: Id<"discounts">
+) => {
+  try {
+    const discount = await ctx.db
+      .query("discounts")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("_id"), discountId),
+          q.eq(q.field("organizationId"), organizationId)
+        )
+      )
+      .first();
+    return discount !== null;
+  } catch (error) {
+    return false;
+  }
+};
