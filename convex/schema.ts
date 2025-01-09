@@ -40,5 +40,32 @@ export default defineSchema({
     getY: v.optional(v.number()),
     organizationId: v.id("organizations"),
   }).index("by_organization", ["organizationId"]),
+
+  carts: defineTable({
+    name: v.string(),
+    description: v.optional(v.string()),
+    products: v.array(
+      v.object({
+        productId: v.id("products"),
+        priceValue: v.number(),
+        priceAlias: v.string(),
+        quantity: v.number(),
+      })
+    ),
+    discounts: v.array(
+      v.object({
+        name: v.string(),
+        type: v.union(
+          v.literal("percentOff"),
+          v.literal("amountOff"),
+          v.literal("buyXGetY")
+        ),
+        value: v.optional(v.number()),
+        buyX: v.optional(v.number()),
+        getY: v.optional(v.number()),
+      })
+    ),
+    organizationId: v.id("organizations"),
+  }).index("by_organization", ["organizationId"]),
 });
 // @snippet end schema
