@@ -1,9 +1,15 @@
-import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { Id } from "@/convex/_generated/dataModel";
+import { getUserOrganization } from "@/convex/utils";
+import { ConvexError, v } from "convex/values";
+import { mutation, query, QueryCtx } from "./_generated/server";
 
 export const get = query({
   handler: async (ctx) => {
-    return await ctx.db.query("products").collect();
+    const userOrganization = await getUserOrganization(ctx);
+    return await ctx.db
+      .query("products")
+      .filter((q) => q.eq(q.field("organizationId"), userOrganization.id))
+      .collect();
   },
 });
 
@@ -21,11 +27,16 @@ export const create = mutation({
   },
   handler: async (ctx, args) => {
     const { name, prices, productionCost } = args;
+    const { id: organizationId } = await getUserOrganization(ctx);
+    if (!organizationId) {
+      throw new ConvexError("No organization for this user");
+    }
 
     return await ctx.db.insert("products", {
       name,
       prices,
       productionCost,
+      organizationId,
     });
   },
 });
@@ -45,6 +56,13 @@ export const update = mutation({
   },
   handler: async (ctx, args) => {
     const { id, name, prices, productionCost } = args;
+    const { id: organizationId } = await getUserOrganization(ctx);
+    if (!organizationId) {
+      throw new ConvexError("No organization for this user");
+    }
+    if (!(await isProductInOrganization(ctx, organizationId, id))) {
+      throw new ConvexError("Product not found in organization");
+    }
 
     return await ctx.db.patch(id, {
       name,
@@ -59,6 +77,35 @@ export const remove = mutation({
     id: v.id("products"),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.delete(args.id);
+    const { id } = args;
+    const { id: organizationId } = await getUserOrganization(ctx);
+    if (!organizationId) {
+      throw new ConvexError("No organization for this user");
+    }
+    if (!(await isProductInOrganization(ctx, organizationId, id))) {
+      throw new ConvexError("Product not found in organization");
+    }
+    return await ctx.db.delete(id);
   },
 });
+
+const isProductInOrganization = async (
+  ctx: QueryCtx,
+  organizationId: Id<"organizations">,
+  productId: Id<"products">
+) => {
+  try {
+    const product = await ctx.db
+      .query("products")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("_id"), productId),
+          q.eq(q.field("organizationId"), organizationId)
+        )
+      )
+      .first();
+    return product !== null;
+  } catch (error) {
+    return false;
+  }
+};

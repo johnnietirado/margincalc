@@ -14,7 +14,11 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as discounts from "../discounts.js";
+import type * as http from "../http.js";
+import type * as organizations from "../organizations.js";
 import type * as products from "../products.js";
+import type * as users from "../users.js";
+import type * as utils from "../utils.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -26,7 +30,11 @@ import type * as products from "../products.js";
  */
 declare const fullApi: ApiFromModules<{
   discounts: typeof discounts;
+  http: typeof http;
+  organizations: typeof organizations;
   products: typeof products;
+  users: typeof users;
+  utils: typeof utils;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

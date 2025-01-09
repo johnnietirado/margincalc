@@ -136,8 +136,6 @@ export function useCartSimulator({
     0
   );
 
-  console.log(discountedTotal, additionalCostsTotal);
-
   const totalCost =
     totalProductionCost + absorbedShippingCost + additionalCostsTotal;
 

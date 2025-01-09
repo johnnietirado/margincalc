@@ -1,8 +1,16 @@
 "use client";
 
-import { Home, Package, ShoppingCart, Tag } from "lucide-react";
+import {
+  Home,
+  LogOutIcon,
+  Package,
+  Settings,
+  ShoppingCart,
+  Tag,
+} from "lucide-react";
 
 import { ModeToggle } from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
@@ -14,6 +22,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { OrganizationSwitcher, useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -48,6 +57,7 @@ const items = [
 
 export function DashboardSidebar() {
   const pathname = usePathname();
+  const { signOut } = useAuth();
 
   return (
     <Sidebar>
@@ -73,7 +83,26 @@ export function DashboardSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="flex justify-end">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <div className="bg-slate-200">
+              <OrganizationSwitcher />
+            </div>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href={"/dashboard/settings"}>
+                <Settings />
+                <span>Settings</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+        <div className="flex justify-between">
+          <Button variant="outline" onClick={() => signOut()}>
+            Sign Out
+            <LogOutIcon />
+          </Button>
           <ModeToggle />
         </div>
       </SidebarFooter>
