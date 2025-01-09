@@ -1,5 +1,5 @@
 import { api } from "@/convex/_generated/api";
-import { useCartSimulator } from "@/lib/hooks/useCartSimulator";
+import { useCartSimulator } from "@/lib/hooks/use-cart-simulator";
 import {
   AdditionalCost,
   CartItem,

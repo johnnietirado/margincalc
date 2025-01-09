@@ -1,3 +1,4 @@
+import { InfoTooltip } from "@/components/common/info-tooltip";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -64,34 +65,35 @@ export function FinancialAnalysis() {
         <div className="bg-muted/50 rounded-lg p-6">
           <div className="space-y-4">
             <div>
-              <p className="text-sm text-muted-foreground">Revenue</p>
+              <div className="flex space-x-2 items-center">
+                <p className="">Revenue</p>
+                <InfoTooltip text="Revenue is the total amount of money earned from sales before any deductions." />
+              </div>
               <p className="font-medium text-lg">${totalRevenue.toFixed(2)}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">
-                Total Production Cost
-              </p>
+              <p className="">Total Production Cost</p>
               <p className="font-medium text-lg">
                 ${totalProductionCost.toFixed(2)}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Order Cost</p>
+              <p className="">Total Order Cost</p>
               <p className="font-medium text-lg">${totalCost.toFixed(2)}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Gross Profit</p>
+              <p className="">Gross Profit</p>
               <p className="font-medium text-lg">${grossProfit.toFixed(2)}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Profit Margin</p>
+              <p className="">Profit Margin</p>
               <p className="font-medium text-lg">{profitMargin.toFixed(2)}%</p>
             </div>
             <div className="pt-4 border-t">
-              <p className="text-sm text-muted-foreground">Discount Impact</p>
+              <p className="">Discount Impact</p>
               <p className="font-medium text-lg text-red-600">
                 -${(subtotal - discountedTotal).toFixed(2)}{" "}
-                <span className="text-sm">
+                <span className="">
                   (
                   {subtotal > 0
                     ? (((subtotal - discountedTotal) / subtotal) * 100).toFixed(
@@ -103,11 +105,11 @@ export function FinancialAnalysis() {
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Shipping Impact</p>
+              <p className="">Shipping Impact</p>
               <p className="font-medium text-lg">
                 ${absorbedShippingCost.toFixed(2)}{" "}
                 {offerFreeShipping && subtotal >= freeShippingThreshold && (
-                  <span className="text-sm text-red-600">(Free)</span>
+                  <span className=" text-red-600">(Free)</span>
                 )}
               </p>
             </div>
@@ -115,8 +117,8 @@ export function FinancialAnalysis() {
             {/* Additional Costs Section */}
             <div className="pt-4 border-t">
               <div className="flex justify-between items-center mb-4">
-                <p className="text-sm font-medium">Additional Costs</p>
-                <p className="text-sm font-medium">
+                <p className=" font-medium">Additional Costs</p>
+                <p className=" font-medium">
                   Total: ${additionalCostsTotal.toFixed(2)}
                 </p>
               </div>
@@ -175,14 +177,10 @@ export function FinancialAnalysis() {
                   >
                     <div className="flex-1">
                       <p className="font-medium">{cost.name}</p>
-                      {cost.note && (
-                        <p className="text-sm text-muted-foreground">
-                          {cost.note}
-                        </p>
-                      )}
+                      {cost.note && <p className="">{cost.note}</p>}
                     </div>
                     <div className="flex items-center gap-4">
-                      <p className="text-sm">
+                      <p className="">
                         {cost.type === "fixed"
                           ? `$${cost.value.toFixed(2)}`
                           : `${cost.value.toFixed(1)}%`}
