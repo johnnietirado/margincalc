@@ -29,11 +29,13 @@ import { api } from "@/convex/_generated/api";
 import { useCart } from "@/lib/contexts/cart-context";
 import { useQuery } from "convex/react";
 import { useState } from "react";
+import { SaveCartModal } from "./save-cart-modal";
 
 export function CartBuilder() {
   const products = useQuery(api.products.get) ?? [];
   const discounts = useQuery(api.discounts.get) ?? [];
   const [selectedPriceId, setSelectedPriceId] = useState<string | null>(null);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
   const {
     cart,
@@ -57,6 +59,7 @@ export function CartBuilder() {
   } = useCart();
 
   const selectedProduct = products.find((p) => p._id === selectedProductId);
+  const selectedDiscount = discounts.find((d) => d._id === selectedDiscountId);
 
   const handleProductChange = (productId: string) => {
     setSelectedProductId(productId);
@@ -65,7 +68,15 @@ export function CartBuilder() {
 
   return (
     <div className="flex flex-col gap-4 col-span-2">
-      <h1 className="text-2xl font-bold">Cart Simulator</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Cart Simulator</h1>
+        {/* <Button
+          onClick={() => setIsSaveModalOpen(true)}
+          disabled={cart.length === 0}
+        >
+          Save Cart
+        </Button> */}
+      </div>
       <div className="space-y-4">
         <div className="grid grid-cols-5 gap-4">
           <div className="col-span-2">
@@ -259,6 +270,19 @@ export function CartBuilder() {
           </CardFooter>
         </Card>
       </div>
+
+      <SaveCartModal
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+        cart={cart}
+        discounts={
+          selectedDiscountId === "no_discount"
+            ? []
+            : selectedDiscount
+              ? [selectedDiscount]
+              : []
+        }
+      />
     </div>
   );
 }
