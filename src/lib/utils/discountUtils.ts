@@ -1,4 +1,4 @@
-import { Discount } from "@/components/discount-manager";
+import { Discount } from "@/components/discounts/discount-manager";
 
 export const getHumanReadableType = (type: Discount["type"]): string => {
   switch (type) {

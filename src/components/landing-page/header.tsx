@@ -9,7 +9,6 @@ const navigation = [
   { name: "Product", href: "/#product" },
   { name: "Features", href: "/#features" },
   { name: "Company", href: "/#company" },
-  { name: "Contact Us", href: "/contact-us" }, // Add this line
 ];
 
 export default function Header() {

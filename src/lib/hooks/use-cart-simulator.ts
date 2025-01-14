@@ -1,5 +1,6 @@
 import { cartStateAtom } from "@/lib/atoms/cart";
 import {
+  AdditionalCost,
   CartSimulatorActions,
   CartSimulatorCalculations,
   CartSimulatorState,

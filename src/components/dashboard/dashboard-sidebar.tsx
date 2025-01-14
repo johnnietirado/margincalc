@@ -99,7 +99,14 @@ export function DashboardSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
         <div className="flex justify-between">
-          <Button variant="outline" onClick={() => signOut()}>
+          <Button
+            variant="outline"
+            onClick={() =>
+              signOut({
+                redirectUrl: "/",
+              })
+            }
+          >
             Sign Out
             <LogOutIcon />
           </Button>

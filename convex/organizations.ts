@@ -56,7 +56,7 @@ export async function getCurrentOrganization(ctx: QueryCtx) {
 
   const organization = await ctx.db
     .query("organizations")
-    .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.orgId))
+    .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity!.orgId as string))
     .unique();
 
   return organization;
