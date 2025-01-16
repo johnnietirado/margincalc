@@ -1,7 +1,7 @@
 "use client";
 
 import { env } from "@/env";
-import { ClerkProvider, useAuth } from "@clerk/nextjs";
+import { ClerkProvider, useAuth, useUser } from "@clerk/nextjs";
 import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ThemeProvider } from "next-themes";
@@ -19,16 +19,21 @@ if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
 }
 
 const UserIdentifier = ({ children }: { children: ReactNode }) => {
-  const { userId } = useAuth();
+  const { user } = useUser();
   useEffect(() => {
     if (
-      userId &&
+      user &&
       typeof window !== "undefined" &&
       window.location.hostname !== "localhost"
     ) {
-      posthog.identify(userId);
+      posthog.identify(user.id, {
+        email: user.emailAddresses[0]?.emailAddress,
+        name: user.fullName,
+        organization: user.organizationMemberships[0]?.organization?.name,
+        organizationId: user.organizationMemberships[0]?.organization?.id,
+      });
     }
-  }, [userId]);
+  }, [user]);
 
   return <>{children}</>;
 };
