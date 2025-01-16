@@ -7,7 +7,7 @@ import { CartProvider } from "@/lib/contexts/cart-context";
 export default function Index() {
   return (
     <CartProvider>
-      <div className="grid grid-cols-3 gap-12">
+      <div className="grid grid-cols-5 gap-8">
         <CartBuilder />
         <FinancialAnalysis />
       </div>

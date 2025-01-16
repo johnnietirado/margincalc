@@ -1,4 +1,5 @@
-import { DashboardGuide } from "@/components/dashboard/dashboard-guide";
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,19 +8,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useUser } from "@clerk/nextjs";
 
-export default async function Dashboard() {
+export default function Dashboard() {
+  const { user } = useUser();
   return (
     <>
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
           <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
             <CardHeader className="pb-3">
-              <CardTitle>Your Dashboard</CardTitle>
+              <CardTitle>Welcome {user?.firstName} 👋</CardTitle>
               <CardDescription className="leading-relaxed">
-                Welcome to your dashboard. This is a blank canvas for your
-                application. We recommend adding some widgets to your dashboard
-                to help you manage your application.
+                This application is designed to help you calculate the margin of
+                your products. You can add products, create discounts, and
+                calculate the true margin of each order.
               </CardDescription>
             </CardHeader>
             <CardFooter>
@@ -27,7 +30,6 @@ export default async function Dashboard() {
             </CardFooter>
           </Card>
         </div>
-        <DashboardGuide />
       </div>
     </>
   );

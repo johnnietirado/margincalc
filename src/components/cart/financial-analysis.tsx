@@ -57,7 +57,7 @@ export function FinancialAnalysis() {
   };
 
   return (
-    <Card className="flex-1">
+    <Card className="flex-1 col-span-2">
       <CardHeader>
         <CardTitle>Financial Analysis</CardTitle>
       </CardHeader>

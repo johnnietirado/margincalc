@@ -10,7 +10,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <DashboardSidebar />
-      <main className="flex flex-col sm:gap-4 p-4 lg:px-16 w-full">
+      <main className="flex flex-col sm:gap-4 p-4 lg:px-8 w-full">
         {children}
       </main>
     </SidebarProvider>

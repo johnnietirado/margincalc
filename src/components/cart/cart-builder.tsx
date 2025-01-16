@@ -67,7 +67,7 @@ export function CartBuilder() {
   };
 
   return (
-    <div className="flex flex-col gap-4 col-span-2">
+    <div className="flex flex-col gap-4 col-span-3">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Cart Simulator</h1>
         {/* <Button

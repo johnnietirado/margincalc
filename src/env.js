@@ -16,11 +16,6 @@ export const env = createEnv({
     FROM_EMAIL: z.string(),
     // Auth related environment variables
     // New R2 related environment variables
-    CLOUDFLARE_ACCOUNT_ID: z.string(),
-    CLOUDFLARE_R2_ACCESS_KEY_ID: z.string(),
-    CLOUDFLARE_R2_SECRET_ACCESS_KEY: z.string(),
-    CLOUDFLARE_R2_BUCKET_NAME: z.string(),
-    CLOUDFLARE_R2_PUBLIC_URL: z.string().url(),
     STRIPE_SECRET_KEY: z.string().optional(),
     STRIPE_WEBHOOK_SECRET: z.string().optional(),
     OPENAI_API_KEY: z.string().optional(),
@@ -38,6 +33,8 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PUBLIC_KEY: z.string().optional(),
     NEXT_PUBLIC_URL: z.string().optional(),
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+    NEXT_PUBLIC_POSTHOG_KEY: z.string(),
+    NEXT_PUBLIC_POSTHOG_HOST: z.string(),
   },
 
   /**
@@ -50,13 +47,6 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     FROM_EMAIL: process.env.FROM_EMAIL,
-    // New R2 related environment variables
-    CLOUDFLARE_ACCOUNT_ID: process.env.CLOUDFLARE_ACCOUNT_ID,
-    CLOUDFLARE_R2_ACCESS_KEY_ID: process.env.CLOUDFLARE_R2_ACCESS_KEY_ID,
-    CLOUDFLARE_R2_SECRET_ACCESS_KEY:
-      process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY,
-    CLOUDFLARE_R2_BUCKET_NAME: process.env.CLOUDFLARE_R2_BUCKET_NAME,
-    CLOUDFLARE_R2_PUBLIC_URL: process.env.CLOUDFLARE_R2_PUBLIC_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
@@ -65,6 +55,8 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
