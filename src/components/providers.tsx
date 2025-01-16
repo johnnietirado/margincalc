@@ -11,7 +11,7 @@ import { ReactNode, useEffect } from "react";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
-if (typeof window !== "undefined" && env.NODE_ENV === "production") {
+if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
   posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
     api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
     person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well
@@ -24,7 +24,7 @@ const UserIdentifier = ({ children }: { children: ReactNode }) => {
     if (
       userId &&
       typeof window !== "undefined" &&
-      env.NODE_ENV === "production"
+      window.location.hostname !== "localhost"
     ) {
       posthog.identify(userId);
     }
