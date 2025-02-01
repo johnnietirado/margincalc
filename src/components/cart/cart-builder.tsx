@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
 import { useCart } from "@/lib/contexts/cart-context";
+import { formatNumberSafe } from "@/lib/utils";
 import { useQuery } from "convex/react";
 import { useState } from "react";
 import { SaveCartModal } from "./save-cart-modal";
@@ -110,7 +111,7 @@ export function CartBuilder() {
               <SelectContent>
                 {selectedProduct?.prices.map((price) => (
                   <SelectItem key={price.id} value={price.id}>
-                    ${price.value.toFixed(2)} ({price.alias})
+                    ${formatNumberSafe(price.value)} ({price.alias})
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -205,8 +206,8 @@ export function CartBuilder() {
             {cart.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>{item.name}</TableCell>
-                <TableCell>${item.sellingPrice.toFixed(2)}</TableCell>
-                <TableCell>${item.productionCost.toFixed(2)}</TableCell>
+                <TableCell>${formatNumberSafe(item.sellingPrice)}</TableCell>
+                <TableCell>${formatNumberSafe(item.productionCost)}</TableCell>
                 <TableCell>
                   <Input
                     type="number"
@@ -219,17 +220,17 @@ export function CartBuilder() {
                   />
                 </TableCell>
                 <TableCell>
-                  ${(item.sellingPrice * item.quantity).toFixed(2)}
+                  ${formatNumberSafe(item.sellingPrice * item.quantity)}
                 </TableCell>
                 <TableCell>
-                  ${(item.productionCost * item.quantity).toFixed(2)}
+                  ${formatNumberSafe(item.productionCost * item.quantity)}
                 </TableCell>
                 <TableCell>
-                  {(
+                  {formatNumberSafe(
                     ((item.sellingPrice - item.productionCost) /
                       item.sellingPrice) *
-                    100
-                  ).toFixed(2)}
+                      100
+                  )}
                   %
                 </TableCell>
                 <TableCell>
@@ -252,20 +253,21 @@ export function CartBuilder() {
           <CardContent>
             <div className="flex flex-row justify-between">
               <p>
-                <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
+                <strong>Subtotal:</strong> ${formatNumberSafe(subtotal)}
               </p>
               <p>
                 <strong>Discount:</strong> $
-                {(subtotal - discountedTotal).toFixed(2)}
+                {formatNumberSafe(subtotal - discountedTotal)}
               </p>
               <p>
-                <strong>Shipping:</strong> ${appliedShippingCost.toFixed(2)}
+                <strong>Shipping:</strong> $
+                {formatNumberSafe(appliedShippingCost)}
               </p>
             </div>
           </CardContent>
           <CardFooter className="border-t pt-4">
             <p className="text-lg font-semibold">
-              <strong>Total:</strong> ${totalRevenue.toFixed(2)}
+              <strong>Total:</strong> ${formatNumberSafe(totalRevenue)}
             </p>
           </CardFooter>
         </Card>

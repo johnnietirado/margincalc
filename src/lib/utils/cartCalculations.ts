@@ -1,4 +1,5 @@
 import { Doc } from "@/convex/_generated/dataModel";
+import { formatNumberSafe } from "@/lib/utils";
 import { CartItem } from "../types/cart";
 
 export function calculateSubtotal(cart: CartItem[]): number {
@@ -90,7 +91,7 @@ export function calculateAbsorbedShippingCost(
 export const calculateProfitMargin = (
   price: number,
   productionCost: number
-) => {
+): string => {
   const profit = price - productionCost;
-  return ((profit / price) * 100).toFixed(2);
+  return formatNumberSafe((profit / price) * 100);
 };

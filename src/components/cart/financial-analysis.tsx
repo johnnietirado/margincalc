@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCart } from "@/lib/contexts/cart-context";
+import { formatNumberSafe } from "@/lib/utils";
 import { useState } from "react";
 
 type NewCost = {
@@ -69,37 +70,45 @@ export function FinancialAnalysis() {
                 <p className="">Revenue</p>
                 <InfoTooltip text="Revenue is the total amount of money earned from sales before any deductions." />
               </div>
-              <p className="font-medium text-lg">${totalRevenue.toFixed(2)}</p>
+              <p className="font-medium text-lg">
+                ${formatNumberSafe(totalRevenue)}
+              </p>
             </div>
             <div>
               <p className="">Total Production Cost</p>
               <p className="font-medium text-lg">
-                ${totalProductionCost.toFixed(2)}
+                ${formatNumberSafe(totalProductionCost)}
               </p>
             </div>
             <div>
               <p className="">Total Order Cost</p>
-              <p className="font-medium text-lg">${totalCost.toFixed(2)}</p>
+              <p className="font-medium text-lg">
+                ${formatNumberSafe(totalCost)}
+              </p>
             </div>
             <div>
               <p className="">Gross Profit</p>
-              <p className="font-medium text-lg">${grossProfit.toFixed(2)}</p>
+              <p className="font-medium text-lg">
+                ${formatNumberSafe(grossProfit)}
+              </p>
             </div>
             <div>
               <p className="">Profit Margin</p>
-              <p className="font-medium text-lg">{profitMargin.toFixed(2)}%</p>
+              <p className="font-medium text-lg">
+                {formatNumberSafe(profitMargin)}%
+              </p>
             </div>
             <div className="pt-4 border-t">
               <p className="">Discount Impact</p>
               <p className="font-medium text-lg text-red-600">
-                -${(subtotal - discountedTotal).toFixed(2)}{" "}
+                -${formatNumberSafe(subtotal - discountedTotal)}{" "}
                 <span className="">
                   (
-                  {subtotal > 0
-                    ? (((subtotal - discountedTotal) / subtotal) * 100).toFixed(
-                        2
-                      )
-                    : "0.00"}
+                  {formatNumberSafe(
+                    subtotal > 0
+                      ? ((subtotal - discountedTotal) / subtotal) * 100
+                      : 0
+                  )}
                   %)
                 </span>
               </p>
@@ -107,9 +116,9 @@ export function FinancialAnalysis() {
             <div>
               <p className="">Shipping Impact</p>
               <p className="font-medium text-lg">
-                ${absorbedShippingCost.toFixed(2)}{" "}
+                ${formatNumberSafe(absorbedShippingCost)}{" "}
                 {offerFreeShipping && subtotal >= freeShippingThreshold && (
-                  <span className=" text-red-600">(Free)</span>
+                  <span className="text-red-600">(Free)</span>
                 )}
               </p>
             </div>
@@ -117,9 +126,9 @@ export function FinancialAnalysis() {
             {/* Additional Costs Section */}
             <div className="pt-4 border-t">
               <div className="flex justify-between items-center mb-4">
-                <p className=" font-medium">Additional Costs</p>
-                <p className=" font-medium">
-                  Total: ${additionalCostsTotal.toFixed(2)}
+                <p className="font-medium">Additional Costs</p>
+                <p className="font-medium">
+                  Total: ${formatNumberSafe(additionalCostsTotal)}
                 </p>
               </div>
 
@@ -182,8 +191,8 @@ export function FinancialAnalysis() {
                     <div className="flex items-center gap-4">
                       <p className="">
                         {cost.type === "fixed"
-                          ? `$${cost.value.toFixed(2)}`
-                          : `${cost.value.toFixed(1)}%`}
+                          ? `$${formatNumberSafe(cost.value)}`
+                          : `${formatNumberSafe(cost.value, 1)}%`}
                       </p>
                       <Button
                         variant="ghost"
